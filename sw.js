@@ -1,7 +1,7 @@
 // Service worker: permite instalar la app y abrirla sin conexión.
 // Los datos (Supabase) y los vídeos nunca se guardan en caché.
 // Si cambias archivos de la app, sube el número de versión.
-const VERSION = "healthbox-v12";
+const VERSION = "healthbox-v13";
 const SHELL = [
   "./",
   "index.html",
@@ -18,6 +18,7 @@ const SHELL = [
   "icons/apple-touch-icon.png",
   "icons/favicon-32.png",
   "favicon.ico",
+  "icons/admin-favicon-32.png",
   "images/web/logo-fondo-claro.png",
   "images/web/logo-fondo-oscuro.png",
 ];
