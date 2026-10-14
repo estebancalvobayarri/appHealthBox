@@ -12,16 +12,21 @@
     }
   }
 
+  // Vale tanto la clave nueva "publishable" (sb_publishable_…), que va solo en "apikey",
+  // como la antigua "anon" (un JWT que empieza por eyJ), que además va en Authorization.
+  function authHeaders() {
+    const key = String(cfg.SUPABASE_ANON_KEY).trim();
+    const h = { "Content-Type": "application/json", apikey: key };
+    if (key.startsWith("eyJ")) h.Authorization = "Bearer " + key;
+    return h;
+  }
+
   async function remote(fn, args) {
     let res;
     try {
       res = await fetch(cfg.SUPABASE_URL.replace(/\/$/, "") + "/rest/v1/rpc/" + fn, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          apikey: cfg.SUPABASE_ANON_KEY,
-          Authorization: "Bearer " + cfg.SUPABASE_ANON_KEY,
-        },
+        headers: authHeaders(),
         body: JSON.stringify(args || {}),
       });
     } catch (e) {

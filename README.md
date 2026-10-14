@@ -21,7 +21,7 @@ Mientras no se configure Supabase, la app funciona en **modo demostración** (lo
    ```
 
 ### 2. Conectar la app
-1. En Supabase ve a **Project Settings → API** y copia **Project URL** y la clave **anon public**.
+1. En Supabase copia la **Project URL** (Project Settings → Data API) y la **Publishable key** (Project Settings → API Keys). También sirve la antigua clave **anon public**.
 2. Pégalas en [`js/config.js`](js/config.js) y guarda el cambio en GitHub.
 
 La clave *anon* es pública por diseño. Las tablas están en un esquema privado y solo se puede acceder a través de funciones que comprueban la sesión en cada llamada. Las contraseñas se guardan cifradas (bcrypt), y tras 10 intentos fallidos se bloquea el acceso durante 15 minutos.
