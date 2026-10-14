@@ -28,7 +28,7 @@ La clave *anon* es pública por diseño. Las tablas están en un esquema privado
 
 ### 3. Publicar la web (GitHub Pages)
 En el repositorio: **Settings → Pages → Build and deployment → Deploy from a branch → `main` / `(root)` → Save**.
-En un par de minutos estará en `https://estebancalvobayarri.github.io/appHora-Fit/` (el panel, en `…/admin.html`).
+En un par de minutos estará en `https://estebancalvobayarri.github.io/appHealthBox/` (el panel, en `…/admin.html`).
 
 ### 4. Primeros pasos en el panel
 1. Entra en `admin.html` con tu usuario de administración.
