@@ -33,7 +33,7 @@ En un par de minutos estará en `https://estebancalvobayarri.github.io/appHealth
 ### 4. Primeros pasos en el panel
 1. Entra en `admin.html` con tu usuario de administración.
 2. **Empresas y usuarios**: crea la empresa y sus usuarios.
-3. **Vídeos**: sustituye los cuatro vídeos de prueba por los tuyos. Valen enlaces de YouTube (pueden ser «ocultos») o de archivos `.mp4`.
+3. **Vídeos**: sustituye los cuatro vídeos de prueba por los tuyos. Valen enlaces de YouTube (pueden ser «ocultos»), de Vimeo (también los privados con enlace, tipo `vimeo.com/123456789/abc123`) o de archivos `.mp4`.
 4. Da a cada empleado el nombre y la contraseña de la empresa, más su usuario y su contraseña.
 
 ## Instalar en el móvil

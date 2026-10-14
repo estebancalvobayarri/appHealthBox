@@ -28,6 +28,19 @@
     return null;
   }
 
+  // Vimeo: vimeo.com/123, vimeo.com/123/abc (enlace privado), player.vimeo.com/video/123?h=abc
+  function vimeoInfo(url) {
+    try {
+      const u = new URL(url);
+      const host = u.hostname.replace(/^www\./, "");
+      let m = null;
+      if (host === "vimeo.com") m = u.pathname.match(/^\/(?:channels\/[^/]+\/|groups\/[^/]+\/videos\/|showcase\/\d+\/video\/)?(\d+)(?:\/([0-9a-f]+))?/i);
+      else if (host === "player.vimeo.com") m = u.pathname.match(/^\/video\/(\d+)/);
+      if (m) return { id: m[1], hash: m[2] || u.searchParams.get("h") || null };
+    } catch (e) {}
+    return null;
+  }
+
   let toastTimer;
   function toast(msg, kind) {
     let el = document.getElementById("toast");
@@ -51,5 +64,5 @@
     finally { if (btn) { btn.disabled = false; btn.removeAttribute("aria-busy"); } }
   }
 
-  window.HF = { store, esc, fmtDate, fmtDateTime, youtubeId, toast, busy };
+  window.HF = { store, esc, fmtDate, fmtDateTime, youtubeId, vimeoInfo, toast, busy };
 })();

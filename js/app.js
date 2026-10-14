@@ -1,6 +1,6 @@
 // HealthBox · app de empleados
 (function () {
-  const { store, esc, fmtDate, youtubeId, toast, busy } = window.HF;
+  const { store, esc, youtubeId, vimeoInfo, toast, busy } = window.HF;
   const api = window.HoraFitApi;
   const $ = (id) => document.getElementById(id);
 
@@ -140,6 +140,7 @@
       const yt = youtubeId(v.url);
       const thumb = yt
         ? `<img src="https://i.ytimg.com/vi/${esc(yt)}/hqdefault.jpg" alt="" loading="lazy">`
+        : vimeoInfo(v.url) ? ""
         : `<video src="${esc(v.url)}#t=1" preload="metadata" muted playsinline tabindex="-1" aria-hidden="true"></video>`;
       return `<li><button type="button" class="video-item" data-id="${esc(v.id)}">
           <span class="thumb">${thumb}<span class="play"></span></span>
@@ -207,7 +208,10 @@
     const tracker = makeTracker(setMeter);
     current = { video, tracker, recorded: false, cleanup: () => {} };
     const yt = youtubeId(video.url);
-    if (yt) mountYouTube(yt, tracker); else mountHtml5(video.url, tracker);
+    const vm = vimeoInfo(video.url);
+    if (yt) mountYouTube(yt, tracker);
+    else if (vm) mountVimeo(vm, tracker);
+    else mountHtml5(video.url, tracker);
     $("btn-close-player").focus({ preventScroll: true });
   }
 
@@ -273,6 +277,41 @@
         tracker.tick(player.getCurrentTime(), player.getDuration(), playing);
       }, 500);
     });
+  }
+
+  let vimeoReady;
+  function loadVimeoApi() {
+    if (!vimeoReady) vimeoReady = new Promise((resolve, reject) => {
+      if (window.Vimeo && window.Vimeo.Player) return resolve();
+      const s = document.createElement("script");
+      s.src = "https://player.vimeo.com/api/player.js";
+      s.onload = resolve;
+      s.onerror = () => { vimeoReady = null; reject(); };
+      document.head.appendChild(s);
+    });
+    return vimeoReady;
+  }
+
+  function mountVimeo({ id, hash }, tracker) {
+    const iframe = document.createElement("iframe");
+    const q = new URLSearchParams({ autoplay: "1", playsinline: "1", title: "0", byline: "0", portrait: "0", dnt: "1" });
+    if (hash) q.set("h", hash);
+    iframe.src = `https://player.vimeo.com/video/${encodeURIComponent(id)}?${q}`;
+    iframe.allow = "autoplay; fullscreen; picture-in-picture";
+    iframe.allowFullscreen = true;
+    iframe.title = "Vídeo";
+    $("stage").replaceChildren(iframe);
+    let player = null, closed = false;
+    current.cleanup = () => { closed = true; try { player && player.unload(); } catch (e) {} };
+    loadVimeoApi().then(() => {
+      if (closed) return;
+      player = new Vimeo.Player(iframe);
+      player.on("timeupdate", (d) => tracker.tick(d.seconds, d.duration, true));
+      player.on("seeked", () => tracker.reset());
+      player.on("pause", () => tracker.reset());
+      player.on("ended", (d) => { tracker.tick(d.duration, d.duration, true); onEnded(); });
+      player.on("error", () => toast("No se puede reproducir este vídeo. Avisa a tu responsable.", "error"));
+    }).catch(() => toast("No se ha podido cargar el reproductor de Vimeo. Comprueba la conexión.", "error"));
   }
 
   function onEnded() {
