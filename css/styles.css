@@ -147,6 +147,16 @@ textarea.input { min-height: 90px; resize: vertical; }
   backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--line);
 }
+.who-wrap { display: flex; align-items: center; gap: 12px; min-width: 0; }
+/* Logo de la empresa cliente: siempre sobre blanco, que es para lo que suelen estar diseñados. */
+.co-logo {
+  display: inline-flex; align-items: center; justify-content: center; justify-self: start;
+  background: #fff; border-radius: 12px; padding: 10px 14px; box-shadow: inset 0 0 0 1px var(--line);
+}
+.co-logo img { display: block; max-height: 56px; max-width: 200px; width: auto; height: auto; object-fit: contain; }
+.co-logo.small { padding: 5px 8px; border-radius: 9px; flex: none; }
+.co-logo.small img { max-height: 30px; max-width: 96px; }
+.dark .co-logo { box-shadow: none; }
 .topbar .who { text-align: right; font-size: 0.82rem; color: var(--muted); line-height: 1.3; min-width: 0; }
 .topbar .who strong { color: var(--fg); display: block; font-size: 0.95rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
@@ -287,6 +297,13 @@ tr.off td { color: var(--muted); }
 }
 .list-select button:hover { background: var(--surface); }
 .list-select button[aria-current="true"] { background: var(--turf-soft); }
+
+.list-select button { justify-content: flex-start; }
+.logo-picker { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.logo-picker .row-actions { justify-content: flex-start; }
+.logo-empty { margin: 0; font-size: 0.92rem; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.btn.quiet:focus-within { outline: 3px solid var(--turf); outline-offset: 3px; }
 
 dialog {
   border: 0; border-radius: 18px; padding: 0; width: min(520px, calc(100% - 24px));

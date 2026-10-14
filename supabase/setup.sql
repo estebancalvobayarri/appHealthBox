@@ -24,6 +24,8 @@ create table if not exists horafit.companies (
   created_at    timestamptz not null default now()
 );
 create unique index if not exists companies_name_uq on horafit.companies (lower(name));
+-- Logo de la empresa como imagen incrustada (data:image/...), reducida en el navegador antes de subirla.
+alter table horafit.companies add column if not exists logo text;
 
 create table if not exists horafit.users (
   id            uuid primary key default gen_random_uuid(),
@@ -184,7 +186,17 @@ begin
   t := horafit.new_token();
   insert into horafit.sessions (token, kind, company_id, expires_at)
   values (t, 'company', c.id, now() + interval '180 days');
-  return json_build_object('token', t, 'company_name', c.name);
+  return json_build_object('token', t, 'company_name', c.name, 'logo', c.logo);
+end $$;
+
+-- Datos de marca de la empresa (nombre y logo) para refrescarlos en dispositivos ya conectados.
+create or replace function public.hf_company_info(p_company_token text) returns json
+language plpgsql security definer set search_path = horafit, extensions, public as $$
+declare s horafit.sessions; c horafit.companies;
+begin
+  s := horafit.session_for(p_company_token, 'company');
+  select * into c from horafit.companies where id = s.company_id;
+  return json_build_object('company_name', c.name, 'logo', c.logo);
 end $$;
 
 create or replace function public.hf_user_login(p_company_token text, p_username text, p_password text) returns json
@@ -300,33 +312,42 @@ language plpgsql security definer set search_path = horafit, extensions, public 
 begin
   perform horafit.require_admin(p_token);
   return coalesce((select json_agg(row_to_json(x) order by lower(x.name)) from (
-    select c.id, c.name, c.active, c.created_at,
+    select c.id, c.name, c.active, c.created_at, c.logo,
            (select count(*) from horafit.users u where u.company_id = c.id) as users,
            (select count(*) from horafit.video_views w where w.company_id = c.id) as views
       from horafit.companies c) x), '[]'::json);
 end $$;
 
+-- Versión anterior sin logo (se elimina para que no haya dos funciones con el mismo nombre).
+drop function if exists public.hf_admin_save_company(text, uuid, text, text, boolean);
+
+-- p_logo: null = no cambiar · '' = quitar · 'data:image/...' = nuevo logo
 create or replace function public.hf_admin_save_company(p_token text, p_id uuid, p_name text,
-                                                        p_password text, p_active boolean) returns json
+                                                        p_password text, p_active boolean, p_logo text default null) returns json
 language plpgsql security definer set search_path = horafit, extensions, public as $$
 declare rid uuid;
 begin
   perform horafit.require_admin(p_token);
   if coalesce(trim(p_name), '') = '' then raise exception 'Escribe el nombre de la empresa.'; end if;
+  if coalesce(p_logo, '') <> '' then
+    if p_logo !~ '^data:image/(png|jpeg|webp);base64,' then raise exception 'El logo debe ser una imagen PNG, JPG o WebP.'; end if;
+    if length(p_logo) > 400000 then raise exception 'El logo es demasiado grande. Prueba con una imagen más sencilla.'; end if;
+  end if;
   if exists (select 1 from horafit.companies
               where lower(name) = lower(trim(p_name)) and id is distinct from p_id) then
     raise exception 'Ya existe una empresa con ese nombre.';
   end if;
   if p_id is null then
     perform horafit.check_password_rules(p_password);
-    insert into horafit.companies (name, password_hash, active)
-    values (trim(p_name), horafit.hash_pw(p_password), coalesce(p_active, true))
+    insert into horafit.companies (name, password_hash, active, logo)
+    values (trim(p_name), horafit.hash_pw(p_password), coalesce(p_active, true), nullif(p_logo, ''))
     returning id into rid;
   else
     if coalesce(p_password, '') <> '' then perform horafit.check_password_rules(p_password); end if;
     update horafit.companies set
       name = trim(p_name),
       active = coalesce(p_active, active),
+      logo = case when p_logo is null then logo else nullif(p_logo, '') end,
       password_hash = case when coalesce(p_password,'') <> '' then horafit.hash_pw(p_password) else password_hash end
     where id = p_id returning id into rid;
     if rid is null then raise exception 'La empresa no existe.'; end if;

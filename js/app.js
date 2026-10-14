@@ -23,14 +23,44 @@
     if (first && id !== "screen-home") setTimeout(() => first.focus({ preventScroll: true }), 50);
   }
 
+  // Muestra el logo de la empresa (si tiene) en los sitios clave.
+  function renderBrand(company) {
+    [["user-company-logo"], ["home-company-logo"]].forEach(([id]) => {
+      const box = $(id), img = box.querySelector("img");
+      if (company && company.logo) {
+        img.src = company.logo;
+        img.alt = "Logo de " + company.name;
+        box.hidden = false;
+      } else {
+        img.removeAttribute("src");
+        box.hidden = true;
+      }
+    });
+    $("user-company-name").textContent = company ? company.name : "";
+    $("home-company").hidden = !!(company && company.logo);
+  }
+
+  // Actualiza nombre y logo por si han cambiado desde el panel.
+  async function refreshBrand() {
+    const company = store.get(K_COMPANY);
+    if (!company) return;
+    try {
+      const r = await api.rpc("hf_company_info", { p_company_token: company.token });
+      const next = { ...company, name: r.company_name, logo: r.logo || null };
+      store.set(K_COMPANY, next);
+      renderBrand(next);
+      if (store.get(K_USER)) $("home-company").textContent = next.name;
+    } catch (err) {
+      if (err.expired) onExpired("company");
+    }
+  }
+
   function route() {
     const company = store.get(K_COMPANY);
     const user = store.get(K_USER);
+    renderBrand(company);
     if (!company) return show("screen-company");
-    if (!user) {
-      $("user-company-name").textContent = company.name;
-      return show("screen-user");
-    }
+    if (!user) return show("screen-user");
     show("screen-home");
     loadHome();
   }
@@ -61,7 +91,7 @@
     busy(f.querySelector("button"), async () => {
       try {
         const r = await api.rpc("hf_company_login", { p_name: name, p_password: password });
-        store.set(K_COMPANY, { token: r.token, name: r.company_name });
+        store.set(K_COMPANY, { token: r.token, name: r.company_name, logo: r.logo || null });
         f.reset();
         route();
       } catch (err) { formError(f, err.message); }
@@ -420,5 +450,6 @@
     window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
   }
   route();
+  refreshBrand();
   if (store.get(K_USER)) flushPending();
 })();

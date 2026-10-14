@@ -176,7 +176,72 @@
   // ---------------------------------------------------------------
   //  Diálogos de edición
   // ---------------------------------------------------------------
-  function editDialog(dlg, { title, values, passwordHint, onSave }) {
+  // ---------------------------------------------------------------
+  //  Logo de empresa: se reduce en el navegador y se guarda como imagen incrustada
+  // ---------------------------------------------------------------
+  const KEEP = "__keep__";
+  function readLogo(file) {
+    return new Promise((resolve, reject) => {
+      if (!file || !/^image\//.test(file.type)) return reject(new Error("Elige un archivo de imagen (PNG, JPG, WebP o SVG)."));
+      if (file.size > 10 * 1024 * 1024) return reject(new Error("La imagen pesa más de 10 MB. Elige una más ligera."));
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => {
+        let w = img.naturalWidth || 600, h = img.naturalHeight || 300;
+        const k = Math.min(1, 600 / w, 300 / h);
+        w = Math.max(1, Math.round(w * k)); h = Math.max(1, Math.round(h * k));
+        const canvas = document.createElement("canvas");
+        canvas.width = w; canvas.height = h;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, w, h);
+        URL.revokeObjectURL(url);
+        let data = canvas.toDataURL("image/png");
+        if (data.length > 380000) {
+          const webp = canvas.toDataURL("image/webp", 0.9);
+          if (webp.startsWith("data:image/webp")) data = webp;
+        }
+        if (data.length > 380000) {
+          // Último recurso: JPG sobre fondo blanco.
+          ctx.globalCompositeOperation = "destination-over";
+          ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, w, h);
+          data = canvas.toDataURL("image/jpeg", 0.88);
+        }
+        if (data.length > 380000) return reject(new Error("El logo es demasiado grande. Prueba con una imagen más sencilla."));
+        resolve(data);
+      };
+      img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("No se ha podido leer la imagen. Prueba con un PNG o JPG.")); };
+      img.src = url;
+    });
+  }
+
+  function setLogoPreview(src) {
+    const box = $("logo-preview");
+    if (src) box.querySelector("img").src = src; else box.querySelector("img").removeAttribute("src");
+    box.hidden = !src;
+    $("logo-empty").hidden = !!src;
+    $("logo-remove").hidden = !src;
+    $("logo-pick-label").textContent = src ? "Cambiar imagen" : "Subir imagen";
+  }
+
+  $("logo-file").addEventListener("change", async (e) => {
+    const f = $("dlg-company").querySelector("form");
+    const file = e.target.files[0];
+    e.target.value = "";
+    if (!file) return;
+    try {
+      const data = await readLogo(file);
+      f.elements.logo.value = data;
+      setLogoPreview(data);
+      formError(f, "");
+    } catch (err) { formError(f, err.message); }
+  });
+  $("logo-remove").addEventListener("click", () => {
+    $("dlg-company").querySelector("form").elements.logo.value = "";
+    setLogoPreview(null);
+  });
+  const logoParam = (v) => (v === KEEP ? null : v || "");
+
+  function editDialog(dlg, { title, values, passwordHint, onSave, preview }) {
     const f = dlg.querySelector("form");
     f.reset(); formError(f, "");
     dlg.querySelector("h2").textContent = title;
@@ -184,6 +249,7 @@
       const el = f.elements[k]; if (!el) return;
       if (el.type === "checkbox") el.checked = !!v; else el.value = v == null ? "" : v;
     });
+    if (dlg.id === "dlg-company") setLogoPreview(preview || null);
     const hint = f.password && f.password.parentElement.querySelector("small");
     if (hint) hint.textContent = passwordHint || "";
     f.onsubmit = (e) => {
@@ -211,7 +277,8 @@
     }
     if (!companies.some((c) => c.id === selectedCompany)) selectedCompany = companies[0].id;
     $("company-list").innerHTML = companies.map((c) => `<li><button type="button" data-id="${esc(c.id)}" aria-current="${c.id === selectedCompany}">
-        <span><strong>${esc(c.name)}</strong><span class="sub muted" style="display:block;font-size:13px">${c.users} ${c.users === 1 ? "usuario" : "usuarios"} · ${c.views} vídeos completados</span></span>
+        ${c.logo ? `<span class="co-logo small"><img src="${esc(c.logo)}" alt=""></span>` : ""}
+        <span style="flex:1;min-width:0"><strong>${esc(c.name)}</strong><span class="sub muted" style="display:block;font-size:13px">${c.users} ${c.users === 1 ? "usuario" : "usuarios"} · ${c.views} vídeos completados</span></span>
         ${c.active ? "" : '<span class="pill">Desactivada</span>'}</button></li>`).join("");
     renderCompanyDetail();
   }
@@ -224,7 +291,7 @@
   async function renderCompanyDetail() {
     const c = companies.find((x) => x.id === selectedCompany); if (!c) return;
     const box = $("company-detail");
-    box.innerHTML = `<div class="panel-head"><h2>${esc(c.name)}</h2>
+    box.innerHTML = `<div class="panel-head"><div class="who-wrap">${c.logo ? `<span class="co-logo small"><img src="${esc(c.logo)}" alt="Logo de ${esc(c.name)}"></span>` : ""}<h2>${esc(c.name)}</h2></div>
       <div class="row-actions"><button class="btn small quiet" type="button" data-act="edit-company">Editar empresa</button>
       <button class="btn small" type="button" data-act="new-user">Nuevo usuario</button></div></div>
       <div class="table-scroll" id="user-table"><p class="muted">Cargando…</p></div>
@@ -250,10 +317,10 @@
   }
 
   $("btn-new-company").addEventListener("click", () => editDialog($("dlg-company"), {
-    title: "Nueva empresa", values: { active: true },
+    title: "Nueva empresa", values: { active: true, logo: "" }, preview: null,
     passwordHint: "Al menos 6 caracteres. Se la darás a los empleados junto con el nombre.",
     onSave: async (d) => {
-      const r = await call("hf_admin_save_company", { p_id: null, p_name: d.name, p_password: d.password, p_active: d.active });
+      const r = await call("hf_admin_save_company", { p_id: null, p_name: d.name, p_password: d.password, p_active: d.active, p_logo: logoParam(d.logo) });
       selectedCompany = r.id; await afterCompanyChange(); toast("Empresa creada.", "ok");
     },
   }));
@@ -266,10 +333,10 @@
     switch (b.dataset.act) {
       case "edit-company":
         return editDialog($("dlg-company"), {
-          title: "Editar empresa", values: { name: c.name, active: c.active },
+          title: "Editar empresa", values: { name: c.name, active: c.active, logo: KEEP }, preview: c.logo,
           passwordHint: "Déjala vacía para no cambiarla. Si la cambias, todos los dispositivos de esta empresa tendrán que volver a entrar.",
           onSave: async (d) => {
-            await call("hf_admin_save_company", { p_id: c.id, p_name: d.name, p_password: d.password || null, p_active: d.active });
+            await call("hf_admin_save_company", { p_id: c.id, p_name: d.name, p_password: d.password || null, p_active: d.active, p_logo: logoParam(d.logo) });
             await afterCompanyChange(); toast("Empresa guardada.", "ok");
           },
         });

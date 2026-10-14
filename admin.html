@@ -123,6 +123,20 @@
       <p class="form-error" role="alert" hidden></p>
       <label class="field"><span>Nombre de la empresa</span><input class="input" name="name" required></label>
       <label class="field"><span>Contraseña de la empresa</span><input class="input" name="password" autocomplete="new-password"><small></small></label>
+      <div class="field">
+        <span>Logo de la empresa</span>
+        <div class="logo-picker">
+          <span class="co-logo" id="logo-preview" hidden><img alt="Vista previa del logo"></span>
+          <p class="logo-empty muted" id="logo-empty">Sin logo</p>
+          <div class="row-actions">
+            <label class="btn small quiet" for="logo-file" id="logo-pick-label">Subir imagen</label>
+            <input type="file" id="logo-file" accept="image/png,image/jpeg,image/webp,image/svg+xml" class="sr-only">
+            <button type="button" class="btn small danger" id="logo-remove" hidden>Quitar logo</button>
+          </div>
+        </div>
+        <small>PNG, JPG o SVG. Mejor con fondo transparente o blanco. Se ajusta de tamaño automáticamente.</small>
+        <input type="hidden" name="logo">
+      </div>
       <label class="check"><input type="checkbox" name="active" checked> Activa (sus usuarios pueden entrar)</label>
       <div class="dialog-actions">
         <button class="btn quiet" value="cancel" formnovalidate type="submit">Cancelar</button>

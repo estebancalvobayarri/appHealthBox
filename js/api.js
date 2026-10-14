@@ -94,7 +94,12 @@
       const c = d.companies.find((x) => same(x.name, a.p_name) && x.active);
       if (!c || c.password !== a.p_password) throw new ApiError("El nombre de empresa o la contraseña no son correctos.");
       const t = uid(); d.sessions.push({ token: t, kind: "company", company_id: c.id });
-      return { token: t, company_name: c.name };
+      return { token: t, company_name: c.name, logo: c.logo || null };
+    },
+    hf_company_info(d, a) {
+      const s = session(d, a.p_company_token, "company");
+      const c = d.companies.find((x) => x.id === s.company_id);
+      return { company_name: c.name, logo: c.logo || null };
     },
     hf_user_login(d, a) {
       const s = session(d, a.p_company_token, "company");
@@ -142,21 +147,24 @@
     },
     hf_admin_companies(d, a) {
       session(d, a.p_token, "admin");
-      return sortBy(d.companies, (c) => c.name.toLowerCase()).map((c) => ({ id: c.id, name: c.name, active: c.active, created_at: c.created_at,
+      return sortBy(d.companies, (c) => c.name.toLowerCase()).map((c) => ({ id: c.id, name: c.name, active: c.active, created_at: c.created_at, logo: c.logo || null,
         users: d.users.filter((u) => u.company_id === c.id).length, views: d.views.filter((w) => w.company_id === c.id).length }));
     },
     hf_admin_save_company(d, a) {
       session(d, a.p_token, "admin");
       if (!String(a.p_name || "").trim()) throw new ApiError("Escribe el nombre de la empresa.");
       if (d.companies.some((c) => same(c.name, a.p_name) && c.id !== a.p_id)) throw new ApiError("Ya existe una empresa con ese nombre.");
+      if (a.p_logo && !/^data:image\/(png|jpeg|webp);base64,/.test(a.p_logo)) throw new ApiError("El logo debe ser una imagen PNG, JPG o WebP.");
+      if (a.p_logo && a.p_logo.length > 400000) throw new ApiError("El logo es demasiado grande. Prueba con una imagen más sencilla.");
       if (!a.p_id) {
         pwRule(a.p_password);
-        const c = { id: uid(), name: a.p_name.trim(), password: a.p_password, active: a.p_active !== false, created_at: new Date().toISOString() };
+        const c = { id: uid(), name: a.p_name.trim(), password: a.p_password, active: a.p_active !== false, logo: a.p_logo || null, created_at: new Date().toISOString() };
         d.companies.push(c); return { id: c.id };
       }
       const c = d.companies.find((x) => x.id === a.p_id); if (!c) throw new ApiError("La empresa no existe.");
       if (a.p_password) { pwRule(a.p_password); c.password = a.p_password; }
       c.name = a.p_name.trim(); if (a.p_active != null) c.active = a.p_active;
+      if (a.p_logo != null) c.logo = a.p_logo || null;
       if (a.p_password || a.p_active === false) d.sessions = d.sessions.filter((s) => s.company_id !== c.id);
       return { id: c.id };
     },
