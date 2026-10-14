@@ -7,6 +7,6 @@
 // Mientras estén vacíos, la app funciona en MODO DEMOSTRACIÓN
 // (todo se guarda solo en el navegador).
 window.HORAFIT_CONFIG = {
-  SUPABASE_URL: "",       // p. ej. "https://abcdefghijklm.supabase.co"
-  SUPABASE_ANON_KEY: "",  // p. ej. "sb_publishable_xxxxxxxx" o "eyJhbGciOi..."
+  SUPABASE_URL: "https://fzkeavlhhpphvdstmocn.supabase.co",
+  SUPABASE_ANON_KEY: "sb_publishable_q_Rh43zUbcMCO8UYyHydDQ_jGFlBLBL",
 };
