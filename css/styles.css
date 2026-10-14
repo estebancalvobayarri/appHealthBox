@@ -52,6 +52,11 @@ h1, h2, h3 { font-family: var(--display); line-height: 1.08; letter-spacing: -0.
   font-family: var(--display); font-weight: 700; font-size: 1.15rem; letter-spacing: -0.01em; white-space: nowrap;
 }
 .logo::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--ambar); margin-right: 9px; flex: none; }
+/* Logos de imagen: versión clara (letras oscuras) sobre fondos claros, versión de letras blancas sobre fondos oscuros. */
+.brand-logo { display: block; height: 26px; width: auto; max-width: 100%; }
+.gate-hero .brand-logo { height: 32px; margin-bottom: 18px; }
+.logo-row { display: flex; align-items: center; gap: 12px; margin: 0; }
+.logo-row .tag { font-weight: 500; font-size: 0.9rem; color: var(--muted); white-space: nowrap; }
 .logo .tag { font-family: var(--body); font-weight: 500; font-size: 0.9rem; color: var(--muted); margin-left: 10px; letter-spacing: 0; }
 .eyebrow {
   font-family: var(--mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.12em;
