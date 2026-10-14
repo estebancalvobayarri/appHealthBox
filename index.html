@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Hora Fit</title>
+  <meta name="description" content="Vídeos de ejercicios para tu empresa.">
+  <meta name="theme-color" content="#2a4cf5">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Hora Fit">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div id="demo-banner" class="demo-banner" hidden>
+    Modo demostración: los datos se guardan solo en este navegador. Empresa <b>Demo</b>, usuario <b>ana</b>, contraseñas <b>demo123</b>.
+  </div>
+
+  <!-- 1. Acceso de empresa -->
+  <section id="screen-company" class="gate" hidden>
+    <header class="gate-hero">
+      <div class="dial" aria-hidden="true"></div>
+      <h1 class="wordmark"><span>HORA</span><span>FIT</span></h1>
+      <p class="context">Tu momento para moverte en el trabajo.</p>
+    </header>
+    <div class="gate-body">
+      <h2>Entra con tu empresa</h2>
+      <p class="lead">Pide estos datos a tu responsable. Solo hay que ponerlos una vez en este dispositivo.</p>
+      <form id="form-company" novalidate>
+        <p class="form-error" role="alert" hidden></p>
+        <label class="field"><span>Nombre de la empresa</span>
+          <input class="input" name="name" autocomplete="organization" autocapitalize="words" required>
+        </label>
+        <label class="field"><span>Contraseña de la empresa</span>
+          <input class="input" name="password" type="password" autocomplete="current-password" required>
+        </label>
+        <button class="btn block" type="submit">Entrar</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- 2. Acceso de usuario -->
+  <section id="screen-user" class="gate" hidden>
+    <header class="gate-hero">
+      <div class="dial" aria-hidden="true" style="--hand: 120deg"></div>
+      <h1 class="wordmark"><span>HORA</span><span>FIT</span></h1>
+      <p class="context" id="user-company-name"></p>
+    </header>
+    <div class="gate-body">
+      <h2>¿Quién eres?</h2>
+      <p class="lead">Entra con tu usuario para empezar.</p>
+      <form id="form-user" novalidate>
+        <p class="form-error" role="alert" hidden></p>
+        <label class="field"><span>Usuario</span>
+          <input class="input" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" required>
+        </label>
+        <label class="field"><span>Contraseña</span>
+          <input class="input" name="password" type="password" autocomplete="current-password" required>
+        </label>
+        <button class="btn block" type="submit">Empezar</button>
+      </form>
+      <div class="gate-foot">
+        <button class="linkbtn" type="button" id="btn-change-company">Cambiar de empresa</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Lista de vídeos -->
+  <section id="screen-home" hidden>
+    <header class="topbar">
+      <p class="wordmark">HORA FIT</p>
+      <div class="who"><strong id="home-user"></strong><span id="home-company"></span></div>
+    </header>
+    <main class="wrap">
+      <div class="hello">
+        <h1 id="home-hello"></h1>
+        <p class="progress-line" id="home-progress-text"></p>
+        <div class="progress-bar" aria-hidden="true"><i id="home-progress-bar" style="width:0"></i></div>
+      </div>
+      <div class="chips" id="chips" role="group" aria-label="Filtrar por tipo de ejercicio"></div>
+      <ul class="videos" id="video-list" aria-live="polite"></ul>
+      <div id="install-tip" class="install-tip" hidden></div>
+      <div class="gate-foot">
+        <button class="linkbtn" type="button" id="btn-logout">Cerrar sesión</button>
+      </div>
+    </main>
+  </section>
+
+  <!-- 4. Reproductor -->
+  <section id="player" class="player" hidden role="dialog" aria-modal="true" aria-labelledby="player-title">
+    <div class="player-bar">
+      <button class="linkbtn" type="button" id="btn-close-player">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Volver a la lista
+      </button>
+    </div>
+    <div class="stage" id="stage"></div>
+    <div class="player-info">
+      <h2 id="player-title"></h2>
+      <p id="player-desc"></p>
+      <div class="watch-meter">
+        <span id="watch-text">Míralo hasta el final para que cuente.</span>
+        <div class="progress-bar" aria-hidden="true"><i id="watch-bar" style="width:0"></i></div>
+      </div>
+      <div id="done-card" class="done-card" hidden>
+        <svg viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="22" fill="currentColor"/><path d="M13 22.5l6 6 12-13" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div><strong>Vídeo completado</strong><span id="done-text">Queda registrado.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <script src="js/config.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

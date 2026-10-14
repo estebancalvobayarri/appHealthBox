@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Hora Fit · Administración</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#2a4cf5">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="admin">
+  <div id="demo-banner" class="demo-banner" hidden>
+    Modo demostración: los datos se guardan solo en este navegador. Administración: usuario <b>admin</b>, contraseña <b>admin123</b>.
+  </div>
+
+  <!-- Acceso -->
+  <section id="screen-login" class="gate" hidden>
+    <header class="gate-hero">
+      <div class="dial" aria-hidden="true" style="--hand: 210deg"></div>
+      <h1 class="wordmark"><span>HORA</span><span>FIT</span></h1>
+      <p class="context">Panel de administración</p>
+    </header>
+    <div class="gate-body">
+      <h2>Entra como administrador</h2>
+      <p class="lead">Desde aquí gestionas empresas, usuarios y vídeos, y consultas quién ha visto cada vídeo.</p>
+      <form id="form-login" novalidate>
+        <p class="form-error" role="alert" hidden></p>
+        <label class="field"><span>Usuario</span>
+          <input class="input" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" required>
+        </label>
+        <label class="field"><span>Contraseña</span>
+          <input class="input" name="password" type="password" autocomplete="current-password" required>
+        </label>
+        <button class="btn block" type="submit">Entrar</button>
+      </form>
+      <div class="gate-foot"><a class="linkbtn" href="./">Ir a la app</a></div>
+    </div>
+  </section>
+
+  <!-- Panel -->
+  <section id="screen-admin" hidden>
+    <header class="topbar">
+      <p class="wordmark">HORA FIT<span class="tag">Administración</span></p>
+      <button class="btn small quiet" type="button" id="btn-logout">Cerrar sesión</button>
+    </header>
+    <main class="admin-wrap">
+      <div class="stats" id="stats"></div>
+      <nav class="tabs" role="tablist">
+        <button class="tab" role="tab" data-tab="views" aria-selected="true">Registro</button>
+        <button class="tab" role="tab" data-tab="companies" aria-selected="false">Empresas y usuarios</button>
+        <button class="tab" role="tab" data-tab="videos" aria-selected="false">Vídeos</button>
+        <button class="tab" role="tab" data-tab="account" aria-selected="false">Mi cuenta</button>
+      </nav>
+
+      <!-- Registro -->
+      <div id="tab-views" role="tabpanel">
+        <div class="panel">
+          <div class="filters">
+            <label class="field"><span>Empresa</span><select class="input" id="f-company"></select></label>
+            <label class="field"><span>Usuario</span><select class="input" id="f-user"></select></label>
+            <label class="field"><span>Vídeo</span><select class="input" id="f-video"></select></label>
+            <label class="field"><span>Desde</span><input class="input" type="date" id="f-from"></label>
+            <label class="field"><span>Hasta</span><input class="input" type="date" id="f-to"></label>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head">
+            <h2 id="views-title">Visualizaciones completas</h2>
+            <div class="row-actions">
+              <button class="btn small quiet" type="button" id="btn-group" aria-pressed="false">Ver resumen por persona</button>
+              <button class="btn small" type="button" id="btn-csv">Descargar Excel (CSV)</button>
+            </div>
+          </div>
+          <div class="table-scroll" id="views-table"></div>
+        </div>
+      </div>
+
+      <!-- Empresas y usuarios -->
+      <div id="tab-companies" role="tabpanel" hidden>
+        <div class="two-col">
+          <div class="panel">
+            <div class="panel-head"><h2>Empresas</h2><button class="btn small" type="button" id="btn-new-company">Nueva empresa</button></div>
+            <ul class="list-select" id="company-list"></ul>
+          </div>
+          <div class="panel" id="company-detail"></div>
+        </div>
+      </div>
+
+      <!-- Vídeos -->
+      <div id="tab-videos" role="tabpanel" hidden>
+        <div class="panel">
+          <div class="panel-head"><h2>Vídeos</h2><button class="btn small" type="button" id="btn-new-video">Añadir vídeo</button></div>
+          <p class="muted" style="margin-top:0">Se muestran a los empleados en este orden. Puedes usar enlaces de YouTube o de archivos de vídeo (.mp4).</p>
+          <div class="table-scroll" id="video-table"></div>
+        </div>
+      </div>
+
+      <!-- Cuenta -->
+      <div id="tab-account" role="tabpanel" hidden>
+        <div class="panel" style="max-width:520px">
+          <h2>Cambiar mi contraseña</h2>
+          <form id="form-password" novalidate>
+            <p class="form-error" role="alert" hidden></p>
+            <label class="field"><span>Contraseña actual</span><input class="input" type="password" name="old" autocomplete="current-password"></label>
+            <label class="field"><span>Contraseña nueva</span><input class="input" type="password" name="new" autocomplete="new-password" minlength="6"><small>Al menos 6 caracteres.</small></label>
+            <button class="btn" type="submit">Cambiar contraseña</button>
+          </form>
+        </div>
+      </div>
+    </main>
+  </section>
+
+  <!-- Diálogos -->
+  <dialog id="dlg-company">
+    <form method="dialog" novalidate>
+      <h2></h2>
+      <p class="form-error" role="alert" hidden></p>
+      <label class="field"><span>Nombre de la empresa</span><input class="input" name="name" required></label>
+      <label class="field"><span>Contraseña de la empresa</span><input class="input" name="password" autocomplete="new-password"><small></small></label>
+      <label class="check"><input type="checkbox" name="active" checked> Activa (sus usuarios pueden entrar)</label>
+      <div class="dialog-actions">
+        <button class="btn quiet" value="cancel" formnovalidate type="submit">Cancelar</button>
+        <button class="btn" value="save" type="submit">Guardar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="dlg-user">
+    <form method="dialog" novalidate>
+      <h2></h2>
+      <p class="form-error" role="alert" hidden></p>
+      <label class="field"><span>Usuario</span><input class="input" name="username" autocapitalize="none" spellcheck="false" required><small>Con esto entra el empleado. No distingue mayúsculas.</small></label>
+      <label class="field"><span>Nombre para mostrar</span><input class="input" name="display_name" placeholder="Opcional, p. ej. Ana López"></label>
+      <label class="field"><span>Contraseña</span><input class="input" name="password" autocomplete="new-password"><small></small></label>
+      <label class="check"><input type="checkbox" name="active" checked> Activo (puede entrar)</label>
+      <div class="dialog-actions">
+        <button class="btn quiet" value="cancel" formnovalidate type="submit">Cancelar</button>
+        <button class="btn" value="save" type="submit">Guardar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="dlg-video">
+    <form method="dialog" novalidate>
+      <h2></h2>
+      <p class="form-error" role="alert" hidden></p>
+      <label class="field"><span>Título</span><input class="input" name="title" required></label>
+      <label class="field"><span>Enlace del vídeo</span><input class="input" name="url" type="url" placeholder="https://www.youtube.com/watch?v=…" required>
+        <small>Enlace de YouTube (puede ser «oculto») o de un archivo .mp4.</small></label>
+      <label class="field"><span>Tipo de ejercicio</span><input class="input" name="category" list="cat-options" placeholder="p. ej. Estiramientos"></label>
+      <datalist id="cat-options"></datalist>
+      <label class="field"><span>Descripción</span><textarea class="input" name="description" placeholder="Opcional"></textarea></label>
+      <label class="field"><span>Orden</span><input class="input" name="sort_order" type="number" step="1" value="100"><small>Los números más bajos salen primero.</small></label>
+      <label class="check"><input type="checkbox" name="active" checked> Visible para los empleados</label>
+      <div class="dialog-actions">
+        <button class="btn quiet" value="cancel" formnovalidate type="submit">Cancelar</button>
+        <button class="btn" value="save" type="submit">Guardar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="js/config.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
