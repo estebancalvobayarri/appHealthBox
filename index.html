@@ -3,19 +3,19 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Hora Fit</title>
-  <meta name="description" content="Vídeos de ejercicios para tu empresa.">
-  <meta name="theme-color" content="#2a4cf5">
+  <title>HealthBox</title>
+  <meta name="description" content="Pausas activas de 5 minutos con estiramientos guiados en tu empresa.">
+  <meta name="theme-color" content="#ffffff">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Hora Fit">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="HealthBox">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -25,10 +25,16 @@
 
   <!-- 1. Acceso de empresa -->
   <section id="screen-company" class="gate" hidden>
-    <header class="gate-hero">
-      <div class="dial" aria-hidden="true"></div>
-      <h1 class="wordmark"><span>HORA</span><span>FIT</span></h1>
-      <p class="context">Tu momento para moverte en el trabajo.</p>
+    <header class="gate-hero dark">
+      <div class="inner">
+        <p class="logo">HealthBox</p>
+        <h1>Cinco minutos para estirar, <em class="mark">sin salir del trabajo</em>.</h1>
+        <div class="timer" aria-hidden="true">
+          <span class="label">Tu pausa activa</span>
+          <span class="clock">05:00</span>
+          <span class="bar"><i></i></span>
+        </div>
+      </div>
     </header>
     <div class="gate-body">
       <h2>Entra con tu empresa</h2>
@@ -48,14 +54,16 @@
 
   <!-- 2. Acceso de usuario -->
   <section id="screen-user" class="gate" hidden>
-    <header class="gate-hero">
-      <div class="dial" aria-hidden="true" style="--hand: 120deg"></div>
-      <h1 class="wordmark"><span>HORA</span><span>FIT</span></h1>
-      <p class="context" id="user-company-name"></p>
+    <header class="gate-hero dark">
+      <div class="inner">
+        <p class="logo">HealthBox</p>
+        <p class="eyebrow">Pausas activas</p>
+        <h1 id="user-company-name"></h1>
+      </div>
     </header>
     <div class="gate-body">
       <h2>¿Quién eres?</h2>
-      <p class="lead">Entra con tu usuario para empezar.</p>
+      <p class="lead">Entra con tu usuario para empezar tu pausa.</p>
       <form id="form-user" novalidate>
         <p class="form-error" role="alert" hidden></p>
         <label class="field"><span>Usuario</span>
@@ -75,7 +83,7 @@
   <!-- 3. Lista de vídeos -->
   <section id="screen-home" hidden>
     <header class="topbar">
-      <p class="wordmark">HORA FIT</p>
+      <p class="logo">HealthBox</p>
       <div class="who"><strong id="home-user"></strong><span id="home-company"></span></div>
     </header>
     <main class="wrap">
@@ -109,7 +117,7 @@
         <div class="progress-bar" aria-hidden="true"><i id="watch-bar" style="width:0"></i></div>
       </div>
       <div id="done-card" class="done-card" hidden>
-        <svg viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="22" fill="currentColor"/><path d="M13 22.5l6 6 12-13" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="22" fill="currentColor"/><path d="M13 22.5l6 6 12-13" fill="none" stroke="#0E1726" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <div><strong>Vídeo completado</strong><span id="done-text">Queda registrado.</span></div>
       </div>
     </div>

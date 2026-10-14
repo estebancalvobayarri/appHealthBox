@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Hora Fit · Administración</title>
+  <title>HealthBox · Administración</title>
   <meta name="robots" content="noindex">
-  <meta name="theme-color" content="#2a4cf5">
+  <meta name="theme-color" content="#ffffff">
   <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body class="admin">
@@ -19,10 +19,12 @@
 
   <!-- Acceso -->
   <section id="screen-login" class="gate" hidden>
-    <header class="gate-hero">
-      <div class="dial" aria-hidden="true" style="--hand: 210deg"></div>
-      <h1 class="wordmark"><span>HORA</span><span>FIT</span></h1>
-      <p class="context">Panel de administración</p>
+    <header class="gate-hero dark">
+      <div class="inner">
+        <p class="logo">HealthBox</p>
+        <p class="eyebrow">Panel de administración</p>
+        <h1>Mira cómo usa tu equipo las pausas.</h1>
+      </div>
     </header>
     <div class="gate-body">
       <h2>Entra como administrador</h2>
@@ -44,7 +46,7 @@
   <!-- Panel -->
   <section id="screen-admin" hidden>
     <header class="topbar">
-      <p class="wordmark">HORA FIT<span class="tag">Administración</span></p>
+      <p class="logo">HealthBox<span class="tag">Administración</span></p>
       <button class="btn small quiet" type="button" id="btn-logout">Cerrar sesión</button>
     </header>
     <main class="admin-wrap">

@@ -1,6 +1,6 @@
-# Hora Fit
+# HealthBox · app
 
-Web-app instalable (se ve como una app al añadirla a la pantalla de inicio) con vídeos de ejercicios para empresas.
+App de [HealthBox](https://github.com/estebancalvobayarri/HealthBox): web-app instalable (se ve como una app al añadirla a la pantalla de inicio) con los vídeos de pausas activas para las empresas.
 
 - **Empleados** (`index.html`): entran con el nombre y la contraseña de su empresa (una sola vez por dispositivo) y después con su usuario y contraseña. Ven la lista de vídeos y su progreso.
 - **Registro**: cada vez que un usuario ve un vídeo **hasta el final**, queda guardado quién, qué vídeo y cuándo. Saltar hacia delante no cuenta: hay que haber reproducido al menos el 90 % de los segundos del vídeo. Si no hay conexión en ese momento, se guarda y se envía cuando vuelve.
@@ -37,7 +37,7 @@ En un par de minutos estará en `https://estebancalvobayarri.github.io/appHora-F
 4. Da a cada empleado el nombre y la contraseña de la empresa, más su usuario y su contraseña.
 
 ## Instalar en el móvil
-- **Android (Chrome)**: aparece el botón «Instalar Hora Fit» al final de la lista, o bien Menú ⋮ → «Instalar aplicación».
+- **Android (Chrome)**: aparece el botón «Instalar HealthBox» al final de la lista, o bien Menú ⋮ → «Instalar aplicación».
 - **iPhone (Safari)**: botón Compartir → «Añadir a pantalla de inicio».
 
 ## Estructura

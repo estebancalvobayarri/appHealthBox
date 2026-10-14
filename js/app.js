@@ -1,4 +1,4 @@
-// Hora Fit · app de empleados
+// HealthBox · app de empleados
 (function () {
   const { store, esc, fmtDate, youtubeId, toast, busy } = window.HF;
   const api = window.HoraFitApi;
@@ -364,12 +364,12 @@
     const ios = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
     if (standalone) { tip.hidden = true; return; }
     if (installEvent) {
-      tip.innerHTML = '<strong>Ten Hora Fit a mano.</strong> Instálala en tu pantalla de inicio y ábrela como una app.' +
-        '<div style="margin-top:10px"><button class="btn small" type="button" id="btn-install">Instalar Hora Fit</button></div>';
+      tip.innerHTML = '<strong>Ten HealthBox a mano.</strong> Instálala en tu pantalla de inicio y ábrela como una app.' +
+        '<div style="margin-top:10px"><button class="btn small" type="button" id="btn-install">Instalar HealthBox</button></div>';
       $("btn-install").onclick = async () => { installEvent.prompt(); await installEvent.userChoice; installEvent = null; renderInstallTip(); };
       tip.hidden = false;
     } else if (ios) {
-      tip.innerHTML = '<strong>Ten Hora Fit a mano.</strong> En Safari, pulsa el botón Compartir y elige «Añadir a pantalla de inicio».';
+      tip.innerHTML = '<strong>Ten HealthBox a mano.</strong> En Safari, pulsa el botón Compartir y elige «Añadir a pantalla de inicio».';
       tip.hidden = false;
     } else {
       tip.hidden = true;
