@@ -197,6 +197,7 @@ textarea.input { min-height: 84px; resize: vertical; }
 .video-item .meta { min-width: 0; }
 .video-item .cat { font-size: 13px; color: var(--muted); font-weight: 600; }
 .video-item h3 { margin: 1px 0 4px; font-size: 17px; line-height: 1.25; font-weight: 700; }
+.video-item .desc { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: 14px; color: var(--muted); line-height: 1.35; }
 .status { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; border-radius: 99px; padding: 3px 10px 3px 8px; }
 .status.done { background: var(--done-soft); color: var(--done); }
 .status.todo { background: var(--bg); color: var(--muted); }

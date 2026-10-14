@@ -125,12 +125,6 @@
   }
 
   function renderHome() {
-    const done = videos.filter((v) => v.times_completed > 0).length;
-    $("home-progress-text").textContent = videos.length
-      ? (done === videos.length ? "Has completado todos los vídeos. ¡Muy bien!" : `Has completado ${done} de ${videos.length} vídeos.`)
-      : "";
-    $("home-progress-bar").style.width = videos.length ? (done / videos.length) * 100 + "%" : "0";
-
     const cats = [...new Set(videos.map((v) => v.category).filter(Boolean))];
     if (filter && !cats.includes(filter)) filter = null;
     $("chips").hidden = cats.length < 2;
@@ -147,13 +141,10 @@
       const thumb = yt
         ? `<img src="https://i.ytimg.com/vi/${esc(yt)}/hqdefault.jpg" alt="" loading="lazy">`
         : `<video src="${esc(v.url)}#t=1" preload="metadata" muted playsinline tabindex="-1" aria-hidden="true"></video>`;
-      const status = v.times_completed > 0
-        ? `<span class="status done"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2.5 7.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>${v.times_completed === 1 ? "Completado" : "Completado " + v.times_completed + " veces"}</span>`
-        : `<span class="status todo">Sin ver</span>`;
       return `<li><button type="button" class="video-item" data-id="${esc(v.id)}">
           <span class="thumb">${thumb}<span class="play"></span></span>
           <span class="meta">${v.category ? `<span class="cat">${esc(v.category)}</span>` : ""}
-            <h3>${esc(v.title)}</h3>${status}</span>
+            <h3>${esc(v.title)}</h3>${v.description ? `<span class="desc">${esc(v.description)}</span>` : ""}</span>
         </button></li>`;
     }).join("");
   }

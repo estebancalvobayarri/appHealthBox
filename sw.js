@@ -1,7 +1,7 @@
 // Service worker: permite instalar la app y abrirla sin conexión.
 // Los datos (Supabase) y los vídeos nunca se guardan en caché.
 // Si cambias archivos de la app, sube el número de versión.
-const VERSION = "horafit-v3";
+const VERSION = "horafit-v4";
 const SHELL = [
   "./",
   "index.html",
