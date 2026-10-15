@@ -79,16 +79,6 @@ em.mark { font-style: normal; background: linear-gradient(transparent 88%, var(-
 .gate-hero .inner { width: 100%; max-width: 460px; margin: 0 auto; display: grid; gap: 16px; }
 .gate-hero .logo { margin-bottom: 18px; }
 .gate-hero h1 { margin: 0; font-size: clamp(2rem, 9vw, 2.7rem); font-weight: 800; overflow-wrap: anywhere; }
-/* El temporizador de la web, como guiño en el acceso. */
-.timer {
-  justify-self: start; display: grid; gap: 4px; min-width: 190px; margin-top: 6px;
-  background: var(--medianoche); color: var(--claro); border-radius: 16px; padding: 14px 18px;
-  box-shadow: 0 14px 40px rgba(var(--shadow), .3);
-}
-.timer .label { font-size: 0.8rem; color: color-mix(in srgb, var(--claro) 75%, transparent); font-weight: 500; }
-.timer .clock { font-family: var(--mono); font-size: 2rem; line-height: 1; font-variant-numeric: tabular-nums; }
-.timer .bar { height: 5px; background: color-mix(in srgb, var(--claro) 20%, transparent); border-radius: 99px; overflow: hidden; margin-top: 6px; }
-.timer .bar i { display: block; height: 100%; width: 100%; background: var(--ambar); border-radius: 99px; transform-origin: left; transition: transform 1s linear; }
 .gate-body {
   flex: 1; width: 100%; max-width: 460px; margin: 0 auto;
   padding: 30px 20px max(28px, env(safe-area-inset-bottom));
