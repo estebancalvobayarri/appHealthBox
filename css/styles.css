@@ -1,21 +1,24 @@
 /* HealthBox · app y panel
-   Mismo sistema visual que la web (healthbox): base clara con texto Noche,
-   Noche/Medianoche solo en momentos puntuales (.dark) y Ámbar en pequeñas dosis. */
+   Misma paleta que la web (healthbox): base clara piedra con texto Noche,
+   Noche/Medianoche solo en momentos puntuales (.dark) y Menta (--ambar) en pequeñas dosis. */
 :root {
-  --noche: #0E1726;
-  --medianoche: #182540;
-  --bruma: #9AA6B8;
-  --claro: #F3F4F7;
-  --ambar: #FFB224;
+  --noche: #161616;            /* casi negro */
+  --medianoche: #242422;       /* superficie sobre oscuro */
+  --bruma: #A8A8A2;            /* gris medio para leerse sobre negro */
+  --claro: #E8E8E4;            /* gris piedra */
+  --ambar: #7ED9B0;            /* Menta (se mantiene el nombre, igual que en la web) */
 
-  --bg: #ffffff;
+  --bg: #FAFAF8;
   --surface: var(--claro);
   --fg: var(--noche);
-  --muted: #4f5b70;
-  --line: #dfe2e9;
+  --muted: #5E5E59;
+  --line: #DEDED9;
+  --surface-hover: #DEDED9;
+  --card: var(--bg);           /* tarjetas del panel sobre fondo piedra */
   --turf: var(--ambar);
   --turf-ink: var(--noche);
-  --turf-soft: #fff1d6;
+  --turf-soft: #DCF4E9;        /* menta muy rebajada */
+  --shadow: 22, 22, 22;
   --danger: #b4232f;
   --danger-soft: #fde8ea;
 
@@ -28,8 +31,8 @@
   color-scheme: light;
 }
 .dark {
-  --bg: var(--noche); --surface: var(--medianoche); --fg: var(--claro); --muted: var(--bruma); --line: #26344f;
-  --turf-soft: #393326;
+  --bg: var(--noche); --surface: var(--medianoche); --fg: var(--claro); --muted: var(--bruma); --line: #34342F;
+  --turf-soft: #1E3A2E;
   color-scheme: dark; background: var(--bg); color: var(--fg);
 }
 
@@ -57,7 +60,7 @@ h1, h2, h3 { font-family: var(--display); line-height: 1.08; letter-spacing: -0.
 .gate-hero .brand-logo { height: 32px; margin-bottom: 18px; }
 /* Logo de fondo blanco sobre fondos oscuros: dentro de su recuadro blanco. */
 /* Logo de fondo oscuro sobre la cabecera blanca: dentro de su recuadro azul noche. */
-.brand-logo.tile-dark { box-sizing: content-box; height: 34px; padding: 5px 10px; background: #0E1726; border-radius: 10px; }
+.brand-logo.tile-dark { box-sizing: content-box; height: 34px; padding: 5px 10px; background: var(--noche); border-radius: 10px; }
 .gate-hero .brand-logo.tile { box-sizing: content-box; height: 56px; padding: 10px 16px; background: #fff; border-radius: 12px; justify-self: start; }
 .logo-row { display: flex; align-items: center; gap: 12px; margin: 0; }
 .logo-row .tag { font-weight: 500; font-size: 0.9rem; color: var(--muted); white-space: nowrap; }
@@ -84,7 +87,7 @@ em.mark { font-style: normal; background: linear-gradient(transparent 88%, var(-
 .timer {
   justify-self: start; display: grid; gap: 4px; min-width: 190px; margin-top: 6px;
   background: var(--medianoche); color: var(--claro); border-radius: 16px; padding: 14px 18px;
-  box-shadow: 0 14px 40px rgba(0, 0, 0, .3);
+  box-shadow: 0 14px 40px rgba(var(--shadow), .3);
 }
 .timer .label { font-size: 0.8rem; color: color-mix(in srgb, var(--claro) 75%, transparent); font-weight: 500; }
 .timer .clock { font-family: var(--mono); font-size: 2rem; line-height: 1; font-variant-numeric: tabular-nums; }
@@ -194,7 +197,7 @@ textarea.input { min-height: 90px; resize: vertical; }
   background: var(--surface); border-radius: var(--radius);
   transition: background .15s ease;
 }
-.video-item:hover { background: #eaecf1; }
+.video-item:hover { background: var(--surface-hover); }
 .thumb {
   position: relative; aspect-ratio: 16 / 11; border-radius: var(--radius-sm); overflow: hidden;
   background: var(--turf-soft); color: var(--noche); display: grid; place-items: center;
@@ -202,7 +205,7 @@ textarea.input { min-height: 90px; resize: vertical; }
 .thumb img, .thumb video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .thumb .play {
   position: relative; width: 34px; height: 34px; border-radius: 50%; background: var(--ambar);
-  display: grid; place-items: center; box-shadow: 0 4px 12px rgba(14, 23, 38, .25);
+  display: grid; place-items: center; box-shadow: 0 4px 12px rgba(var(--shadow), .25);
 }
 .thumb .play::after { content: ""; margin-left: 3px; border-left: 11px solid var(--noche); border-top: 7px solid transparent; border-bottom: 7px solid transparent; }
 .video-item .meta { min-width: 0; display: grid; gap: 2px; }
@@ -251,7 +254,7 @@ textarea.input { min-height: 90px; resize: vertical; }
   position: fixed; left: 50%; bottom: max(20px, env(safe-area-inset-bottom)); z-index: 50;
   transform: translate(-50%, 20px); opacity: 0; pointer-events: none;
   background: var(--noche); color: var(--claro); padding: 12px 18px; border-radius: 12px; font-weight: 500; font-size: 0.95rem;
-  max-width: calc(100% - 32px); box-shadow: 0 14px 40px rgba(14, 23, 38, .3);
+  max-width: calc(100% - 32px); box-shadow: 0 14px 40px rgba(var(--shadow), .3);
   transition: opacity .2s ease, transform .2s ease;
 }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
@@ -260,7 +263,7 @@ textarea.input { min-height: 90px; resize: vertical; }
 
 /* ================= Panel de administración ================= */
 body.admin { background: var(--surface); }
-.admin .topbar { background: color-mix(in srgb, #fff 90%, transparent); }
+.admin .topbar { background: color-mix(in srgb, var(--bg) 90%, transparent); }
 .admin-wrap { max-width: 1120px; margin: 0 auto; padding: 22px 20px 60px; }
 .tabs { display: flex; gap: 4px; overflow-x: auto; border-bottom: 1px solid var(--line); margin-bottom: 22px; scrollbar-width: none; }
 .tab {
@@ -271,12 +274,12 @@ body.admin { background: var(--surface); }
 .tab[aria-selected="true"] { color: var(--fg); border-bottom-color: var(--ambar); }
 .stats {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-  background: #fff; border: 1px solid var(--line); border-radius: var(--radius); margin-bottom: 22px; overflow: hidden;
+  background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); margin-bottom: 22px; overflow: hidden;
 }
 .stat { padding: 18px 20px; display: grid; gap: 2px; border-left: 1px solid var(--line); margin-left: -1px; }
 .stat b { font-family: var(--display); font-size: 2rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; }
 .stat span { color: var(--muted); font-size: 0.88rem; line-height: 1.35; }
-.panel { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; margin-bottom: 18px; }
+.panel { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; margin-bottom: 18px; }
 .panel h2 { margin: 0 0 14px; font-size: 1.35rem; font-weight: 700; }
 .panel-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
 .panel-head h2 { margin: 0; }
@@ -316,9 +319,9 @@ tr.off td { color: var(--muted); }
 
 dialog {
   border: 0; border-radius: 18px; padding: 0; width: min(520px, calc(100% - 24px));
-  background: #fff; color: var(--fg); box-shadow: 0 30px 60px rgba(14, 23, 38, .28);
+  background: var(--card); color: var(--fg); box-shadow: 0 30px 60px rgba(var(--shadow), .28);
 }
-dialog::backdrop { background: rgba(14, 23, 38, .55); }
+dialog::backdrop { background: rgba(var(--shadow), .55); }
 dialog form { padding: 26px; }
 dialog h2 { margin: 0 0 18px; font-size: 1.5rem; font-weight: 700; }
 .dialog-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px; flex-wrap: wrap; }
