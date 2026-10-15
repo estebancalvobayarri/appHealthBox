@@ -95,6 +95,24 @@ em.mark { font-style: normal; background: linear-gradient(transparent 88%, var(-
 .gate-body h2 { font-size: 1.6rem; font-weight: 700; margin: 0 0 6px; }
 .gate-body .lead { color: var(--muted); margin: 0 0 22px; }
 
+/* Escritorio: las pantallas de acceso (empresa, usuario y administración) van en una tarjeta
+   centrada sobre fondo blanco. En móvil se mantienen a pantalla completa. */
+@media (min-width: 760px) {
+  .gate {
+    display: grid; grid-template-columns: min(480px, 100%);
+    justify-content: center; align-content: center;
+    padding: 48px 24px; background: #fff;
+    filter: drop-shadow(0 24px 48px rgba(var(--shadow), .14));
+  }
+  .gate-hero { padding: 36px 36px 34px; border-radius: 22px 22px 0 0; }
+  .gate-hero .inner { max-width: none; }
+  .gate-body {
+    flex: none; max-width: none; margin: 0; padding: 30px 36px 34px;
+    background: var(--bg); border: 1px solid var(--line); border-top: 0; border-radius: 0 0 22px 22px;
+  }
+  body .demo-banner + .gate .gate-hero { padding-top: 36px; }
+}
+
 /* ---------- Formularios ---------- */
 .field { display: grid; gap: 6px; margin-bottom: 16px; }
 .field > span { font-weight: 600; font-size: 0.88rem; }
