@@ -36,7 +36,9 @@
         box.hidden = true;
       }
     });
+    // Sin logo, el nombre de la empresa ocupa su lugar junto al logo de HealthBox.
     $("user-company-name").textContent = company ? company.name : "";
+    $("user-company-name").hidden = !company || !!company.logo;
     $("home-company").hidden = !!(company && company.logo);
   }
 

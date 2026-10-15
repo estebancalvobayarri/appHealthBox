@@ -79,6 +79,15 @@ em.mark { font-style: normal; background: linear-gradient(transparent 88%, var(-
 .gate-hero .inner { width: 100%; max-width: 460px; margin: 0 auto; display: grid; gap: 16px; }
 .gate-hero .logo { margin-bottom: 18px; }
 .gate-hero h1 { margin: 0; font-size: clamp(2rem, 9vw, 2.7rem); font-weight: 800; overflow-wrap: anywhere; }
+/* Acceso de usuario: logo de HealthBox a la izquierda y el de la empresa (o su nombre) a la derecha. */
+.brand-pair { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; min-width: 0; }
+.gate-hero .brand-pair .brand-logo { margin-bottom: 0; flex: 0 1 auto; min-width: 0; }
+.brand-pair .co-logo { flex: none; padding: 7px 10px; border-radius: 10px; }
+.brand-pair .co-logo img { max-height: 40px; max-width: 120px; }
+.co-name {
+  font-family: var(--display); font-weight: 700; font-size: 1.15rem; line-height: 1.15; letter-spacing: -0.01em;
+  text-align: right; color: var(--fg); max-width: 45%; overflow-wrap: anywhere;
+}
 .gate-body {
   flex: 1; width: 100%; max-width: 460px; margin: 0 auto;
   padding: 30px 20px max(28px, env(safe-area-inset-bottom));
